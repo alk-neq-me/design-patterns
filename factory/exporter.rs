@@ -41,7 +41,7 @@ impl VideoExporter for LowQulatityVideoExporter {
 }
 
 
-/** For Video Exporter **/
+/** For Audio Exporter **/
 struct Mp3AudioExporter;
 
 impl AudioExporter for Mp3AudioExporter {
