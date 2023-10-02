@@ -120,7 +120,8 @@ fn main() {
 
   youtube_channal.unscribe(Rc::clone(&subyoutube_channal) as Rc<dyn SubscriberObserver>);
 
-  youtube_channal.notify(Rc::new(String::from("Hello again from my youtube channal!")));
+  let msg = Rc::new(String::from("Hello again from my youtube channal!"));
+  youtube_channal.notify(Rc::clone(&msg));
 
   println!("total messages in youtube_account: {:?}", youtube_account.messages.borrow().len());
   println!("total messages in subyoutube_channal: {:?}", subyoutube_channal.messages.borrow().len());
@@ -129,5 +130,7 @@ fn main() {
 
   println!("Check RefCount subyoutube_channal: {}", Rc::strong_count(&subyoutube_channal));
   println!("Check RefCount youtube_account: {}", Rc::strong_count(&youtube_account));
+
+  println!("Check RefCount msg: {}", Rc::strong_count(&msg));
 }
 
