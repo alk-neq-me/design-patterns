@@ -13,6 +13,12 @@ trait Seller {
  */
 struct FullSeller;
 
+impl FullSeller {
+  fn new() -> FullSeller {
+    FullSeller
+  }
+}
+
 impl Seller for FullSeller {
   fn sell_coin(&self) {
     println!("full seller");
@@ -21,6 +27,12 @@ impl Seller for FullSeller {
 
 
 struct HalfSeller;
+
+impl HalfSeller {
+  fn new() -> HalfSeller {
+    HalfSeller
+  }
+}
 
 impl Seller for HalfSeller {
   fn sell_coin(&self) {
@@ -32,34 +44,37 @@ impl Seller for HalfSeller {
 /**
  * Context
  */
-struct Trader {
-  // Why Box, to set_seller dynamic Own type
-  seller: Box<dyn Seller>
+struct Trader<'a> {
+  seller: &'a dyn Seller
 }
 
 
-impl Trader{
+impl<'a> Trader<'a> {
+  fn new(seller: &'a dyn Seller) -> Trader {
+    Trader {
+      seller
+    }
+  }
+
   fn sell_coin(&self) {
     self.seller.sell_coin();
   }
 
-  fn set_seller(&mut self, seller: Box<dyn Seller>) {
+  fn set_seller(&mut self, seller: &'a dyn Seller) {
     self.seller = seller;
   }
 }
 
 
 fn main() {
-  let full_seller = FullSeller;
-  let half_seller = HalfSeller;
+  let full_seller = FullSeller::new();
+  let half_seller = HalfSeller::new();
 
-  let mut trader = Trader {
-    seller: Box::new(half_seller)
-  };
+  let mut trader = Trader::new(&half_seller);
 
   trader.sell_coin();
 
-  trader.set_seller(Box::new(full_seller));
+  trader.set_seller(&full_seller);
 
   trader.sell_coin();
 }
